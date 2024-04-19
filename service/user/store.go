@@ -3,7 +3,8 @@ package user
 import (
 	"database/sql"
 	"fmt"
-	"http-server/standard-server/types"
+
+	"github.com/sila1404/go-http-standard-lib/types"
 )
 
 type Store struct {

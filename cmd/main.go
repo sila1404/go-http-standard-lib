@@ -2,10 +2,11 @@ package main
 
 import (
 	"database/sql"
-	"http-server/standard-server/cmd/api"
-	"http-server/standard-server/config"
-	"http-server/standard-server/db"
 	"log"
+
+	"github.com/sila1404/go-http-standard-lib/cmd/api"
+	"github.com/sila1404/go-http-standard-lib/config"
+	"github.com/sila1404/go-http-standard-lib/db"
 
 	"github.com/go-sql-driver/mysql"
 )

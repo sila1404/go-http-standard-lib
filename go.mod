@@ -1,4 +1,4 @@
-module http-server/standard-server
+module github.com/sila1404/go-http-standard-lib
 
 go 1.22.1
 

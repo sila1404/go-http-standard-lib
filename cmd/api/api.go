@@ -2,9 +2,10 @@ package api
 
 import (
 	"database/sql"
-	"http-server/standard-server/service/user"
 	"log"
 	"net/http"
+
+	"github.com/sila1404/go-http-standard-lib/service/user"
 )
 
 type APIServer struct {

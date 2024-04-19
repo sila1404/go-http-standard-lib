@@ -2,10 +2,11 @@ package user
 
 import (
 	"fmt"
-	"http-server/standard-server/service/auth"
-	"http-server/standard-server/types"
-	"http-server/standard-server/utils"
 	"net/http"
+
+	"github.com/sila1404/go-http-standard-lib/service/auth"
+	"github.com/sila1404/go-http-standard-lib/types"
+	"github.com/sila1404/go-http-standard-lib/utils"
 )
 
 type Handler struct {
