@@ -36,12 +36,12 @@ func NewAPIServer(addr string, db *sql.DB) *APIServer {
 func (s *APIServer) Run() error {
 	router := http.NewServeMux()
 
-	v1 := http.NewServeMux()
-	v1.Handle("/api/v1/", http.StripPrefix("/api/v1", router))
-
 	userStore := user.NewStore(s.db)
 	userService := user.NewHandler(userStore)
-	userService.RegisterRoute(v1)
+	userService.RegisterRoute(router)
+
+	v1 := http.NewServeMux()
+	v1.Handle("/api/v1/", http.StripPrefix("/api/v1", router))
 
 	log.Println("Listening and serving HTTP on ", s.addr)
 	return http.ListenAndServe(s.addr, v1)
