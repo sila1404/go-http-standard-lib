@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/go-playground/validator/v10"
+	"github.com/sila1404/go-http-standard-lib/config"
 	"github.com/sila1404/go-http-standard-lib/service/auth"
 	"github.com/sila1404/go-http-standard-lib/types"
 	"github.com/sila1404/go-http-standard-lib/utils"
@@ -25,7 +26,7 @@ func (h *Handler) RegisterRoute(router *http.ServeMux) {
 
 func (h *Handler) handleLogin(w http.ResponseWriter, r *http.Request) {
 	// get json payload
-	var payload types.RegisterUserPayload
+	var payload types.LoginUserPayload
 	if err := utils.ParseJSON(r, &payload); err != nil {
 		utils.WriteError(w, http.StatusBadRequest, err)
 		return
@@ -49,7 +50,14 @@ func (h *Handler) handleLogin(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	utils.WriteJSON(w, http.StatusOK, map[string]string{"token": ""})
+	secret := []byte(config.Envs.JWTSecret)
+	token, err := auth.CreateJWT(secret, u.ID)
+	if err != nil {
+		utils.WriteError(w, http.StatusInternalServerError, err)
+		return
+	}
+
+	utils.WriteJSON(w, http.StatusOK, map[string]string{"token": token})
 }
 
 func (h *Handler) handleRegister(w http.ResponseWriter, r *http.Request) {
