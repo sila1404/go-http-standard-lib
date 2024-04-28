@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/sila1404/go-http-standard-lib/service/product"
 	"github.com/sila1404/go-http-standard-lib/service/user"
 )
 
@@ -39,6 +40,10 @@ func (s *APIServer) Run() error {
 	userStore := user.NewStore(s.db)
 	userService := user.NewHandler(userStore)
 	userService.RegisterRoute(router)
+
+	productStore := product.NewStore(s.db)
+	productService := product.NewHandler(productStore)
+	productService.RegisterRoute(router)
 
 	v1 := http.NewServeMux()
 	v1.Handle("/api/v1/", http.StripPrefix("/api/v1", router))
