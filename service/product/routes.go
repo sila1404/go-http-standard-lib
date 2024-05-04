@@ -16,10 +16,10 @@ func NewHandler(store types.ProductStore) *Handler {
 }
 
 func (h *Handler) RegisterRoute(router *http.ServeMux) {
-	router.HandleFunc("GET /products", h.handleCreateProduct)
+	router.HandleFunc("GET /products", h.handleGetProduct)
 }
 
-func (h *Handler) handleCreateProduct(w http.ResponseWriter, r *http.Request) {
+func (h *Handler) handleGetProduct(w http.ResponseWriter, r *http.Request) {
 	ps, err := h.store.GetProducts()
 	if err != nil {
 		utils.WriteError(w, http.StatusInternalServerError, err)
