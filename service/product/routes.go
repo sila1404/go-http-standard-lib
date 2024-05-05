@@ -3,6 +3,7 @@ package product
 import (
 	"fmt"
 	"net/http"
+	"strconv"
 
 	"github.com/go-playground/validator/v10"
 	"github.com/sila1404/go-http-standard-lib/types"
@@ -10,19 +11,39 @@ import (
 )
 
 type Handler struct {
-	store types.ProductStore
+	store     types.ProductStore
+	userStore types.UserStore
 }
 
-func NewHandler(store types.ProductStore) *Handler {
-	return &Handler{store: store}
+func NewHandler(store types.ProductStore, userStore types.UserStore) *Handler {
+	return &Handler{store: store, userStore: userStore}
 }
 
 func (h *Handler) RegisterRoute(router *http.ServeMux) {
-	router.HandleFunc("GET /products", h.handleGetProduct)
+	router.HandleFunc("GET /products", h.handleGetProducts)
+	router.HandleFunc("GET /products/{productID}", h.handleGetProduct)
 	router.HandleFunc("POST /products", h.handleCreateProduct)
 }
 
 func (h *Handler) handleGetProduct(w http.ResponseWriter, r *http.Request) {
+	str := r.PathValue("productID")
+
+	productID, err := strconv.Atoi(str)
+	if err != nil {
+		utils.WriteError(w, http.StatusBadRequest, fmt.Errorf("invalid product ID"))
+		return
+	}
+
+	product, err := h.store.GetProductByID(productID)
+	if err != nil {
+		utils.WriteError(w, http.StatusInternalServerError, err)
+		return
+	}
+
+	utils.WriteJSON(w, http.StatusOK, product)
+}
+
+func (h *Handler) handleGetProducts(w http.ResponseWriter, r *http.Request) {
 	ps, err := h.store.GetProducts()
 	if err != nil {
 		utils.WriteError(w, http.StatusInternalServerError, err)

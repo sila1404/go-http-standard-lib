@@ -42,7 +42,7 @@ func (s *APIServer) Run() error {
 	userService.RegisterRoute(router)
 
 	productStore := product.NewStore(s.db)
-	productService := product.NewHandler(productStore)
+	productService := product.NewHandler(productStore, userStore)
 	productService.RegisterRoute(router)
 
 	v1 := http.NewServeMux()
