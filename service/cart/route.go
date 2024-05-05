@@ -11,14 +11,13 @@ import (
 )
 
 type Handler struct {
-	store        types.OrderStore
 	productStore types.ProductStore
 	orderStore   types.OrderStore
 	userStore    types.UserStore
 }
 
-func NewHandler(store types.OrderStore, productStore types.ProductStore) *Handler {
-	return &Handler{store: store, productStore: productStore}
+func NewHandler(productStore types.ProductStore, orderStore types.OrderStore, userStore types.UserStore) *Handler {
+	return &Handler{productStore: productStore, orderStore: orderStore, userStore: userStore}
 }
 
 func (h *Handler) RegisterRoute(router *http.ServeMux) {
@@ -26,7 +25,7 @@ func (h *Handler) RegisterRoute(router *http.ServeMux) {
 }
 
 func (h *Handler) handleCheckout(w http.ResponseWriter, r *http.Request) {
-	userID := 0
+	userID := auth.GetUserIDFromContext(r.Context())
 
 	var cart types.CartCheckoutPayload
 	if err := utils.ParseJSON(r, &cart); err != nil {
